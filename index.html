@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimized Kick Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0e0e10;
+            color: #efeff1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #53fc18;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #adadb8;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .player-container {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16 / 9;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .player-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .player-container .placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #adadb8;
+            font-size: 1.1rem;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .placeholder-icon {
+            font-size: 3rem;
+            color: #53fc18;
+        }
+
+        .controls {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background-color: #53fc18;
+            color: #0e0e10;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: #3fd60e;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        .channels-section {
+            width: 100%;
+            max-width: 900px;
+            background-color: #18181b;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .channels-section h2 {
+            color: #efeff1;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .channel-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 2px solid #2f2f35;
+            background-color: #0e0e10;
+            color: #efeff1;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #53fc18;
+        }
+
+        input[type="text"]::placeholder {
+            color: #636369;
+        }
+
+        .status {
+            color: #adadb8;
+            font-size: 0.85rem;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .channel-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .channel-btn {
+            background-color: #2f2f35;
+            color: #efeff1;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: normal;
+        }
+
+        .channel-btn:hover {
+            background-color: #53fc18;
+            color: #0e0e10;
+        }
+
+        .disclaimer {
+            color: #636369;
+            font-size: 0.8rem;
+            text-align: center;
+            max-width: 600px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .channel-input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Optimized Kick Player</h1>
+    <p class="subtitle">An optimized video player.</p>
+
+    <div class="player-container" id="playerContainer">
+        <div class="placeholder" id="placeholder">
+            <span class="placeholder-icon">▶</span>
+            <span>Enter a channel or select one below to start watching</span>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="reloadBtn">Reload Player</button>
+    </div>
+
+    <div class="channels-section">
+        <h2>Channels and Videos</h2>
+        <p class="status" id="listStatus">Loading list...</p>
+
+        <div class="channel-input-group">
+            <label for="channelInput" style="display:flex;align-items:center;color:#adadb8;">Channel:</label>
+            <input type="text" id="channelInput" placeholder="Enter channel name">
+            <button id="goBtn">Go</button>
+        </div>
+
+        <div class="channel-list" id="channelList"></div>
+    </div>
+
+<!--    <p class="disclaimer">No streams are hosted on our servers.</p> -->
+
+    <script>
+        const playerContainer = document.getElementById('playerContainer');
+        const placeholder = document.getElementById('placeholder');
+        const reloadBtn = document.getElementById('reloadBtn');
+        const channelInput = document.getElementById('channelInput');
+        const goBtn = document.getElementById('goBtn');
+        const listStatus = document.getElementById('listStatus');
+        const channelList = document.getElementById('channelList');
+
+        let currentChannel = null;
+
+        // Default popular channels to show as quick-access buttons
+        const defaultChannels = [
+            'xqc', 'adinross', 'trainwreckstv', 'stake',
+            'kick', 'drdisrespect', 'amouranth', 'roshtein'
+        ];
+
+        /**
+         * Loads a Kick channel into the player via iframe embed.
+         * @param {string} channel - The Kick channel username.
+         */
+        function loadChannel(channel) {
+            if (!channel || channel.trim() === '') return;
+
+            currentChannel = channel.trim().toLowerCase();
+            channelInput.value = currentChannel;
+
+            // Remove placeholder if it exists
+            if (placeholder) {
+                placeholder.style.display = 'none';
+            }
+
+            // Remove any existing iframe
+            const existingIframe = playerContainer.querySelector('iframe');
+            if (existingIframe) {
+                existingIframe.remove();
+            }
+
+            // Create and insert new iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://player.kick.com/${currentChannel}`;
+            iframe.allow = 'autoplay; fullscreen';
+            iframe.allowFullscreen = true;
+            iframe.title = `Kick Player - ${currentChannel}`;
+            playerContainer.appendChild(iframe);
+        }
+
+        /**
+         * Reloads the current channel's player.
+         */
+        function reloadPlayer() {
+            if (currentChannel) {
+                loadChannel(currentChannel);
+            }
+        }
+
+        /**
+         * Renders the quick-access channel buttons.
+         * @param {string[]} channels - Array of channel usernames.
+         */
+        function renderChannelList(channels) {
+            channelList.innerHTML = '';
+
+            if (channels.length === 0) {
+                listStatus.textContent = 'No channels available.';
+                return;
+            }
+
+            listStatus.textContent = 'Select a channel or enter one above:';
+
+            channels.forEach(channelName => {
+                const btn = document.createElement('button');
+                btn.className = 'channel-btn';
+                btn.textContent = channelName;
+                btn.addEventListener('click', () => loadChannel(channelName));
+                channelList.appendChild(btn);
+            });
+        }
+
+        // Event listeners
+        goBtn.addEventListener('click', () => {
+            loadChannel(channelInput.value);
+        });
+
+        channelInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                loadChannel(channelInput.value);
+            }
+        });
+
+        reloadBtn.addEventListener('click', reloadPlayer);
+
+        // Initialize channel list on load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChannelList(defaultChannels);
+        });
+    </script>
+
+</body>
+</html>
