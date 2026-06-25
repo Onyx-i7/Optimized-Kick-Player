@@ -5,7 +5,7 @@
 **A clean, fast, and privacy-focused web player for Kick streams**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-53fc18.svg)](https://onyx-i7.github.io/Optimized-Kick-Player/)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Onyx-i7/Optimized-Kick-Player/releases)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/Onyx-i7/Optimized-Kick-Player/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![HTML5](https://img.shields.io/badge/HTML5-standards--compliant-orange.svg)](https://developer.mozilla.org/docs/Web/HTML)
 [![No Tracking](https://img.shields.io/badge/tracking-none-brightgreen.svg)]()
@@ -13,7 +13,7 @@
 [![GitHub Issues](https://img.shields.io/github/issues/Onyx-i7/Optimized-Kick-Player)](https://github.com/Onyx-i7/Optimized-Kick-Player/issues)
 [![GitHub Stars](https://img.shields.io/github/stars/Onyx-i7/Optimized-Kick-Player)](https://github.com/Onyx-i7/Optimized-Kick-Player/stargazers)
 
-[Live Demo](https://onyx-i7.github.io/Optimized-Kick-Player/) • [Installation](#installation) • [Features](#features) • [Usage](#usage) • [Technical Details](#technical-details) • [Contributing](#contributing)
+[🚀 Live Demo](https://onyx-i7.github.io/Optimized-Kick-Player/) • [Installation](#installation) • [Features](#features) • [Usage](#usage) • [Keyboard Shortcuts](#keyboard-shortcuts) • [Technical Details](#technical-details) • [Contributing](#contributing)
 
 </div>
 
@@ -23,7 +23,7 @@
 
 **Try it now:** [https://onyx-i7.github.io/Optimized-Kick-Player/](https://onyx-i7.github.io/Optimized-Kick-Player/)
 
-The live demo is hosted on GitHub Pages and runs entirely in your browser. No installation required just click and watch.
+The live demo is hosted on GitHub Pages and runs entirely in your browser. No installation required — just click and watch.
 
 ---
 
@@ -54,14 +54,58 @@ Optimized Kick Player is a lightweight, self-contained web application that prov
 | **🖥️ Fullscreen Support** | Native fullscreen capability with proper browser API integration |
 | **📱 Responsive Layout** | Adapts seamlessly from mobile devices to ultrawide monitors |
 
+### 📜 History & Favorites
+
+| Feature | Description |
+|---------|-------------|
+| **📜 Automatic History** | Saves the last 10 channels you watched (persisted in localStorage) |
+| **⭐ Favorites System** | Star any channel to save it permanently across sessions |
+| **🗑️ Clear History** | One-click history cleanup with confirmation dialog |
+| **🔝 Smart Ordering** | Most recently watched channels appear first in history |
+| **🚫 No Duplicates** | History automatically deduplicates entries |
+| **💾 Persistent Storage** | All data survives browser restarts via localStorage |
+
+### 🖼️ Picture-in-Picture
+
+| Feature | Description |
+|---------|-------------|
+| **🖼️ PiP Mode** | Opens a floating popup window (480x270) with the stream |
+| **🪟 Always on Top** | Watch streams while browsing other tabs or apps |
+| **🔁 Auto-Detection** | Detects when PiP window is closed and updates UI |
+| **🚫 Popup Handling** | Clear error message if popups are blocked |
+
+### ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `F` | Toggle Fullscreen |
+| `M` | Mute / Unmute |
+| `P` | Open Picture-in-Picture |
+| `R` | Reload Player |
+| `Esc` | Exit Fullscreen |
+
+**Smart detection**: Shortcuts are automatically disabled when typing in input fields.
+
+### 🎛️ Player Controls
+
+| Feature | Description |
+|---------|-------------|
+| **🎯 Floating Overlay** | Controls appear on hover over the player |
+| **🔊 Mute Toggle** | Mute/unmute with visual feedback |
+| **🖼️ PiP Button** | Quick access to Picture-in-Picture mode |
+| **🔄 Reload Button** | Refresh the current stream instantly |
+| **⛶ Fullscreen Button** | Enter/exit fullscreen mode |
+| **🔔 Toast Notifications** | Visual feedback for every action |
+
 ### 🎯 Channel Management
 
 | Feature | Description |
 |---------|-------------|
 | **🔍 Quick Search** | Type any Kick username and press Enter or click "Go" |
 | **⭐ Quick Access List** | Pre-configured popular channels for one-click access |
-| **🏷️ Visual Feedback** | Active channel is reflected in the input field |
+| **🏷️ Visual Feedback** | Active channel is highlighted across all lists |
 | **📋 Dynamic List Rendering** | Channel buttons are generated on-the-fly with event delegation |
+| **📊 Organized Sections** | Favorites, History, Search, and Popular Channels clearly separated |
 
 ### 🛡️ Privacy & Performance
 
@@ -71,7 +115,7 @@ Optimized Kick Player is a lightweight, self-contained web application that prov
 | **🚫 No Ad Containers** | No ad slots, no sponsored content, no affiliate links |
 | **🔒 Sandboxed iframe** | Streams run in an isolated context with restricted permissions |
 | **⚡ Zero External Dependencies** | No CDNs, no npm packages, no third-party libraries |
-| **🪶 Lightweight** | Entire application is a single HTML file under 15 KB |
+| **🪶 Lightweight** | Entire application is a single HTML file under 20 KB |
 
 ### 🎨 UI/UX Design
 
@@ -82,6 +126,8 @@ Optimized Kick Player is a lightweight, self-contained web application that prov
 | **🎯 Focus States** | Clear visual indicators for keyboard navigation |
 | **📐 Aspect Ratio Lock** | 16:9 player container maintains proper proportions |
 | **🎭 Placeholder State** | Friendly empty state with icon and instructions |
+| **🔔 Toast System** | Non-intrusive notifications at the bottom of the screen |
+| **⌨️ Shortcuts Help Panel** | Visual guide showing all available keyboard shortcuts |
 
 ---
 
@@ -142,32 +188,45 @@ Deploy the single `index.html` file to any static hosting provider:
 2. **Enter a channel** — Type a Kick username in the input field (e.g., `xqc`)
 3. **Start watching** — Press `Enter` or click the "Go" button
 4. **Switch channels** — Enter a new username or click a quick-access button
-5. **Reload if needed** — Click "Reload Player" to refresh the current stream
+5. **Reload if needed** — Click "Reload Player" or press `R`
 
-### Quick Access Channels
+### Managing Favorites & History
 
-The player ships with a curated list of popular Kick channels for instant access:
+- **Add to favorites**: Click the ☆ star next to any channel
+- **Remove from favorites**: Click the ★ star again
+- **View history**: Automatically populated as you watch channels
+- **Clear history**: Click "Clear History" button (requires confirmation)
+- **Persistence**: All data is saved in localStorage and survives browser restarts
 
-- `xqc`
-- `adinross`
-- `trainwreckstv`
-- `stake`
-- `kick`
-- `drdisrespect`
-- `amouranth`
-- `roshtein`
+### Using Picture-in-Picture
 
-### Customizing the Quick Access List
+1. **Load a channel** first
+2. **Press `P`** or click the 🖼️ button in the overlay
+3. **A small window opens** (480x270) with the stream
+4. **Drag it anywhere** on your screen
+5. **Close it** normally or press `P` again
 
-Edit the `defaultChannels` array in the JavaScript section:
+> **Note**: If the popup doesn't open, your browser may be blocking popups. Allow popups for this site.
 
-```javascript
-const defaultChannels = [
-    'yourfavorite',
-    'channel1',
-    'channel2'
-];
-```
+---
+
+## Keyboard Shortcuts
+
+All shortcuts work globally **except** when typing in input fields.
+
+| Key | Action | Description |
+|-----|--------|-------------|
+| `F` | Fullscreen | Toggle fullscreen mode for the player |
+| `M` | Mute | Toggle mute/unmute (reloads iframe) |
+| `P` | PiP | Open Picture-in-Picture popup window |
+| `R` | Reload | Reload the current channel's stream |
+| `Esc` | Exit | Exit fullscreen mode |
+
+### Smart Behavior
+
+- Shortcuts are **automatically disabled** when the cursor is in an input field
+- Modifier keys (`Ctrl`, `Alt`, `Meta`) are ignored to avoid conflicts
+- Visual feedback via toast notifications for every action
 
 ---
 
@@ -184,10 +243,16 @@ index.html
 │   └── <style>          → All CSS (scoped, no external stylesheets)
 └── <body>
     ├── Header (title + subtitle)
-    ├── Player container (iframe host)
+    ├── Player container (iframe host + overlay controls)
     ├── Controls (reload button)
-    ├── Channels section (input + quick access)
+    ├── Channels section
+    │   ├── Favorites (⭐)
+    │   ├── History (📜)
+    │   ├── Search (🔍)
+    │   └── Popular Channels (🎯)
+    ├── Keyboard shortcuts help panel
     ├── Disclaimer
+    ├── Toast notification
     └── <script>         → All JavaScript (vanilla ES6+)
 ```
 
@@ -198,7 +263,20 @@ index.html
 | **`loadChannel(channel)`** | Handles iframe creation, cleanup, and Kick embed URL generation |
 | **`reloadPlayer()`** | Re-initializes the current channel's iframe |
 | **`renderChannelList(channels)`** | Dynamically generates quick-access buttons with event delegation |
-| **Event Listeners** | Manages user input (click, Enter key) and DOM ready state |
+| **`addToHistory(channel)`** | Manages history array with deduplication and size limits |
+| **`toggleFavorite(channel)`** | Adds/removes channels from favorites |
+| **`openPiP()`** | Opens Picture-in-Picture popup window |
+| **`toggleMute()`** | Reloads iframe with `?muted=true` parameter |
+| **`toggleFullscreen()`** | Uses Fullscreen API on player container |
+| **`showToast(message)`** | Displays non-intrusive notifications |
+
+### Storage Structure
+
+```javascript
+// localStorage keys
+kickPlayer_history    // Array of last 10 watched channels
+kickPlayer_favorites  // Array of favorited channels
+```
 
 ### Performance Considerations
 
@@ -207,6 +285,7 @@ index.html
 - **Efficient DOM updates**: Iframe is replaced, not re-rendered on reload
 - **Event delegation**: Channel buttons share a single listener pattern
 - **Zero runtime dependencies**: No library overhead
+- **Lazy initialization**: History and favorites loaded only on DOM ready
 
 ### Security Model
 
@@ -217,6 +296,7 @@ index.html
 | **No data collection** | No cookies, localStorage, or network requests beyond the Kick embed |
 | **No external scripts** | Zero attack surface from third-party JavaScript |
 | **HTTPS only** | Embed URL uses `https://player.kick.com/` |
+| **Popup security** | PiP window uses `window.open()` with controlled dimensions |
 
 ### How It Works
 
@@ -224,6 +304,8 @@ index.html
 User enters channel name
         ↓
 Input sanitized (trimmed + lowercased)
+        ↓
+Channel added to history (localStorage)
         ↓
 Existing iframe removed (if any)
         ↓
@@ -235,6 +317,8 @@ iframe injected into player container
 Browser loads Kick's official player
         ↓
 Stream plays natively
+        ↓
+Toast notification confirms action
 ```
 
 ---
@@ -271,13 +355,19 @@ start index.html         # Windows
 ### Testing Checklist
 
 - [ ] Load a valid Kick channel
-- [ ] Verify fullscreen works
+- [ ] Verify fullscreen works (press `F`)
+- [ ] Test mute toggle (press `M`)
+- [ ] Test Picture-in-Picture (press `P`)
 - [ ] Test quick-access buttons
 - [ ] Test Enter key submission
-- [ ] Test player reload
+- [ ] Test player reload (press `R`)
 - [ ] Verify responsive layout on mobile
 - [ ] Confirm no console errors
 - [ ] Check network tab for unwanted requests
+- [ ] Test history persistence (reload page)
+- [ ] Test favorites persistence (reload page)
+- [ ] Verify shortcuts disabled in input field
+- [ ] Test clear history with confirmation
 
 ---
 
@@ -335,19 +425,27 @@ Have an idea? Open an issue and describe:
 - [x] Privacy-first design (no tracking, no ads)
 - [x] Zero-dependency architecture
 - [x] GitHub Pages deployment
+- [x] **History system** (last 10 channels, localStorage)
+- [x] **Favorites system** (star channels, persistent)
+- [x] **Picture-in-Picture** (popup window)
+- [x] **Keyboard shortcuts** (F, M, P, R)
+- [x] **Floating overlay controls** (mute, PiP, reload, fullscreen)
+- [x] **Toast notifications** (visual feedback)
+- [x] **Keyboard shortcuts help panel**
+- [x] **Clear history** with confirmation
 
 ### Planned Features
 
-- [ ] **Channel history** — Remember recently watched channels (localStorage)
+- [ ] **Channel history export/import** — Backup your history as JSON
 - [ ] **Custom quick-access list** — User-configurable favorites via UI
-- [ ] **Picture-in-Picture** — Native PiP button for multitasking
 - [ ] **Stream quality selector** — Expose quality options when available
 - [ ] **Chat overlay** — Optional embedded Kick chat panel
 - [ ] **Multi-stream view** — Watch up to 4 streams simultaneously
 - [ ] **Custom themes** — User-selectable color schemes
-- [ ] **Keyboard shortcuts** — Space to pause, F for fullscreen, etc.
 - [ ] **PWA support** — Install as a standalone app
 - [ ] **Offline placeholder** — Better UX when channel is offline
+- [ ] **Search suggestions** — Autocomplete for channel names
+- [ ] **Recently watched timestamps** — Show when you last watched a channel
 
 ---
 
@@ -373,7 +471,7 @@ A: Possible reasons:
 - Your browser blocks third-party iframes
 
 **Q: Does this collect any data?**  
-A: **No.** Zero telemetry. Zero analytics. Zero cookies. The only network request is the iframe loading Kick's player.
+A: **No.** Zero telemetry. Zero analytics. Zero cookies. The only network request is the iframe loading Kick's player. Your history and favorites are stored locally in your browser's localStorage.
 
 **Q: Can I modify the quick-access channels?**  
 A: Yes. Edit the `defaultChannels` array in the `<script>` section of `index.html`.
@@ -387,6 +485,12 @@ A:
 2. Go to Settings → Pages
 3. Select "Deploy from branch" → `main` → `/ (root)`
 4. Your site will be live at `https://yourusername.github.io/Optimized-Kick-Player/`
+
+**Q: Why does PiP open a popup instead of native PiP?**  
+A: The Kick iframe is cross-origin, so we can't access the internal `<video>` element to use the native Picture-in-Picture API. The popup window is a workaround that achieves the same result.
+
+**Q: Can I export my history/favorites?**  
+A: Not yet, but it's planned for a future release. Currently, the data is stored in localStorage and can be accessed via browser dev tools.
 
 ---
 
@@ -405,6 +509,7 @@ A:
 - **Vanilla JavaScript (ES6+)** — No frameworks, no libraries
 - **Kick Player Embed** — Official streaming endpoint
 - **GitHub Pages** — Free static hosting
+- **localStorage API** — Client-side data persistence
 
 ---
 
@@ -448,8 +553,6 @@ If you find this project useful, consider:
 <div align="center">
 
 **Built by [Onyx-i7](https://github.com/Onyx-i7)**
-
-*Clean streams. Zero noise. Pure content.*
 
 [🚀 Try the Live Demo](https://onyx-i7.github.io/Optimized-Kick-Player/)
 
