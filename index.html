@@ -1,1117 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Optimized Kick Player</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0e0e10;
-            color: #efeff1;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        h1 {
-            color: #53fc18;
-            font-size: 2rem;
-            margin-bottom: 5px;
-            text-align: center;
-        }
-
-        .subtitle {
-            color: #adadb8;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .main-content {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .player-section {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .player-container {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background-color: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .player-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .player-container .placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #adadb8;
-            font-size: 1.1rem;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .placeholder-icon {
-            font-size: 3rem;
-            color: #53fc18;
-        }
-
-        .player-overlay {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            gap: 6px;
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .player-container:hover .player-overlay {
-            opacity: 1;
-        }
-
-        .overlay-btn {
-            background-color: rgba(14, 14, 16, 0.85);
-            color: #efeff1;
-            border: 1px solid #2f2f35;
-            width: 36px;
-            height: 36px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.2s, transform 0.1s;
-            padding: 0;
-        }
-
-        .overlay-btn:hover {
-            background-color: #53fc18;
-            color: #0e0e10;
-            border-color: #53fc18;
-        }
-
-        .overlay-btn:active {
-            transform: scale(0.92);
-        }
-
-        .overlay-btn.active {
-            background-color: #53fc18;
-            color: #0e0e10;
-            border-color: #53fc18;
-        }
-
-        .chat-section {
-            width: 340px;
-            display: none;
-            flex-direction: column;
-        }
-
-        .chat-section.visible {
-            display: flex;
-        }
-
-        .chat-container {
-            flex: 1;
-            background-color: #18181b;
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-header {
-            background-color: #0e0e10;
-            padding: 12px 16px;
-            border-bottom: 1px solid #2f2f35;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-header h3 {
-            color: #efeff1;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chat-close-btn {
-            background: none;
-            border: none;
-            color: #adadb8;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 0;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            transition: background-color 0.2s, color 0.2s;
-        }
-
-        .chat-close-btn:hover {
-            background-color: #2f2f35;
-            color: #efeff1;
-        }
-
-        .chat-iframe-container {
-            flex: 1;
-            position: relative;
-        }
-
-        .chat-iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .chat-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #636369;
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 20px;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .chat-placeholder-icon {
-            font-size: 2.5rem;
-            color: #53fc18;
-        }
-
-        .chat-notice {
-            background-color: rgba(83, 252, 24, 0.1);
-            border: 1px solid #53fc18;
-            border-radius: 6px;
-            padding: 10px 12px;
-            margin: 12px 16px;
-            font-size: 0.75rem;
-            color: #adadb8;
-            line-height: 1.4;
-        }
-
-        .chat-notice strong {
-            color: #53fc18;
-        }
-
-        .controls {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            background-color: #53fc18;
-            color: #0e0e10;
-            border: none;
-            padding: 10px 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-        }
-
-        button:hover {
-            background-color: #3fd60e;
-        }
-
-        button:active {
-            transform: scale(0.97);
-        }
-
-        .channels-section {
-            width: 100%;
-            max-width: 1200px;
-            background-color: #18181b;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .channels-section h2 {
-            color: #efeff1;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-        }
-
-        .channel-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px 14px;
-            border-radius: 6px;
-            border: 2px solid #2f2f35;
-            background-color: #0e0e10;
-            color: #efeff1;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input[type="text"]:focus {
-            border-color: #53fc18;
-        }
-
-        input[type="text"]::placeholder {
-            color: #636369;
-        }
-
-        .channel-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .channel-btn {
-            background-color: #2f2f35;
-            color: #efeff1;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: normal;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: background-color 0.2s;
-        }
-
-        .channel-btn:hover {
-            background-color: #53fc18;
-            color: #0e0e10;
-        }
-
-        .channel-btn.active {
-            background-color: #53fc18;
-            color: #0e0e10;
-            font-weight: bold;
-        }
-
-        .favorite-btn {
-            background: none;
-            border: none;
-            padding: 0 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: #636369;
-            transition: color 0.2s, transform 0.1s;
-        }
-
-        .favorite-btn:hover {
-            background: none;
-            color: #ffd700;
-            transform: scale(1.2);
-        }
-
-        .favorite-btn.active {
-            color: #ffd700;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            margin-top: 20px;
-        }
-
-        .section-header h3 {
-            color: #efeff1;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-header .icon {
-            font-size: 1.1rem;
-        }
-
-        .clear-btn {
-            background-color: transparent;
-            color: #adadb8;
-            border: 1px solid #2f2f35;
-            padding: 5px 12px;
-            font-size: 0.75rem;
-            font-weight: normal;
-        }
-
-        .clear-btn:hover {
-            background-color: #2f2f35;
-            color: #efeff1;
-        }
-
-        .empty-state {
-            color: #636369;
-            font-size: 0.85rem;
-            font-style: italic;
-            padding: 10px 0;
-        }
-
-        .shortcuts-help {
-            width: 100%;
-            max-width: 1200px;
-            background-color: #18181b;
-            border-radius: 8px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            border-left: 3px solid #53fc18;
-        }
-
-        .shortcuts-help h3 {
-            color: #efeff1;
-            font-size: 1rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .shortcuts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 8px;
-        }
-
-        .shortcut-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
-            color: #adadb8;
-        }
-
-        .key {
-            display: inline-block;
-            background-color: #2f2f35;
-            color: #efeff1;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.8rem;
-            font-weight: bold;
-            min-width: 28px;
-            text-align: center;
-            border: 1px solid #3f3f45;
-        }
-
-        .disclaimer {
-            color: #636369;
-            font-size: 0.8rem;
-            text-align: center;
-            max-width: 600px;
-            margin-top: 10px;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background-color: #18181b;
-            color: #efeff1;
-            padding: 12px 24px;
-            border-radius: 8px;
-            border: 1px solid #53fc18;
-            font-size: 0.9rem;
-            z-index: 1000;
-            opacity: 0;
-            transition: transform 0.3s, opacity 0.3s;
-            pointer-events: none;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        @media (max-width: 900px) {
-            .main-content {
-                flex-direction: column;
-            }
-
-            .chat-section {
-                width: 100%;
-                height: 500px;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .controls {
-                flex-direction: column;
-            }
-
-            button {
-                width: 100%;
-            }
-
-            .channel-input-group {
-                flex-direction: column;
-            }
-
-            .player-overlay {
-                opacity: 1;
-            }
-        }
-    </style>
-</head>
-<body>
-
+    <link rel="icon" href="kick.png" type="image/png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <h1>Optimized Kick Player</h1>
-    <p class="subtitle">An optimized video player.</p>
+    <p class="subtitle">An optimized video player</p>
 
     <div class="main-content">
-        <div class="player-section">
-            <div class="player-container" id="playerContainer">
-                <div class="placeholder" id="placeholder">
-                    <span class="placeholder-icon">▶</span>
-                    <span>Enter a channel or select one below to start watching</span>
-                </div>
-                <div class="player-overlay" id="playerOverlay">
-                    <button class="overlay-btn" id="muteBtn" title="Mute (M)">🔊</button>
-                    <button class="overlay-btn" id="pipBtn" title="PiP Mode (P)">🖼️</button>
-                    <button class="overlay-btn" id="chatBtn" title="Toggle Chat (C)">💬</button>
-                    <button class="overlay-btn" id="reloadOverlayBtn" title="Reload (R)">🔄</button>
-                    <button class="overlay-btn" id="fullscreenBtn" title="Fullscreen (F)">⛶</button>
-                </div>
-            </div>
+      <div class="player-section">
+        <div class="player-container" id="playerContainer">
+          <div class="placeholder" id="placeholder">
+            <span class="placeholder-icon">▶</span>
+            <span>Enter a channel or select one below to start watching</span>
+          </div>
+          <div class="player-overlay" id="playerOverlay">
+            <button class="overlay-btn" id="muteBtn" title="Mute (M)">
+              🔊
+            </button>
+            <button class="overlay-btn" id="pipBtn" title="PiP Mode (P)">
+              🖼️
+            </button>
+            <button
+              class="overlay-btn"
+              id="reloadOverlayBtn"
+              title="Reload (R)"
+            >
+              🔄
+            </button>
+            <button
+              class="overlay-btn"
+              id="fullscreenBtn"
+              title="Fullscreen (F)"
+            >
+              ⛶
+            </button>
+          </div>
         </div>
+      </div>
 
-        <div class="chat-section" id="chatSection">
-            <div class="chat-container">
-                <div class="chat-header">
-                    <h3>💬 Kick Chat</h3>
-                    <button class="chat-close-btn" id="chatCloseBtn" title="Close chat">✕</button>
-                </div>
-                <div class="chat-notice">
-                    <strong>⚠️ External Service:</strong> Chat is provided by chat.kick.cx (third-party). OAuth login and messages are handled externally.
-                </div>
-                <div class="chat-iframe-container" id="chatIframeContainer">
-                    <div class="chat-placeholder" id="chatPlaceholder">
-                        <span class="chat-placeholder-icon">💬</span>
-                        <span>Load a channel to see chat</span>
-                    </div>
-                </div>
+      <div class="chat-section" id="chatSection">
+        <div class="chat-container">
+          <div class="chat-iframe-container" id="chatIframeContainer">
+            <div class="chat-placeholder" id="chatPlaceholder">
+              <span class="chat-placeholder-icon">💬</span>
+              <span>Load a channel to see chat</span>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <div class="controls">
-        <button id="reloadBtn">Reload Player</button>
-        <button id="toggleChatBtn">💬 Toggle Chat</button>
+      <button id="reloadBtn">Reload Player</button>
+      <button id="toggleChatBtn">Toggle Chat</button>
     </div>
 
     <div class="channels-section">
-        <h2>Channels and Videos</h2>
+      <h2>Channels and Videos</h2>
 
-        <div class="section-header">
-            <h3><span class="icon">⭐</span> Favorites</h3>
-        </div>
-        <div class="channel-list" id="favoritesList">
-            <p class="empty-state">No favorites yet. Click the star on any channel to add it here.</p>
-        </div>
+      <div class="section-header">
+        <h3><span class="icon">⭐</span> Favorites</h3>
+      </div>
+      <div class="channel-list" id="favoritesList">
+        <p class="empty-state">
+          No favorites yet. Click the star on any channel to add it here.
+        </p>
+      </div>
 
-        <div class="section-header">
-            <h3><span class="icon">📜</span> History</h3>
-            <button class="clear-btn" id="clearHistoryBtn">Clear History</button>
-        </div>
-        <div class="channel-list" id="historyList">
-            <p class="empty-state">Your watch history will appear here.</p>
-        </div>
+      <div class="section-header">
+        <h3><span class="icon">📜</span> History</h3>
+        <button class="clear-btn" id="clearHistoryBtn">Clear History</button>
+      </div>
+      <div class="channel-list" id="historyList">
+        <p class="empty-state">Your watch history will appear here.</p>
+      </div>
 
-        <div class="section-header">
-            <h3><span class="icon">🔍</span> Search Channel</h3>
-        </div>
-        <div class="channel-input-group">
-            <input type="text" id="channelInput" placeholder="Enter channel name">
-            <button id="goBtn">Go</button>
-        </div>
+      <div class="section-header">
+        <h3><span class="icon">🔍</span> Search Channel</h3>
+      </div>
+      <div class="channel-input-group">
+        <input type="text" id="channelInput" placeholder="Enter channel name" />
+        <button id="goBtn">Go</button>
+      </div>
 
-        <div class="section-header">
-            <h3><span class="icon">🎯</span> Popular Channels</h3>
-        </div>
-        <div class="channel-list" id="channelList"></div>
+      <div class="section-header">
+        <h3><span class="icon">🔥</span> Popular Channels</h3>
+      </div>
+      <div class="channel-list" id="channelList"></div>
     </div>
 
     <div class="shortcuts-help">
-        <h3>⌨️ Keyboard Shortcuts</h3>
-        <div class="shortcuts-grid">
-            <div class="shortcut-item"><span class="key">F</span> Toggle Fullscreen</div>
-            <div class="shortcut-item"><span class="key">M</span> Mute / Unmute</div>
-            <div class="shortcut-item"><span class="key">P</span> Picture-in-Picture</div>
-            <div class="shortcut-item"><span class="key">R</span> Reload Player</div>
-            <div class="shortcut-item"><span class="key">C</span> Toggle Chat</div>
-            <div class="shortcut-item"><span class="key">Esc</span> Exit Fullscreen</div>
+      <h3>Keyboard Shortcuts</h3>
+      <div class="shortcuts-grid">
+        <div class="shortcut-item">
+          <span class="key">F</span> Toggle Fullscreen
         </div>
+        <div class="shortcut-item">
+          <span class="key">M</span> Mute / Unmute
+        </div>
+        <div class="shortcut-item">
+          <span class="key">P</span> Picture-in-Picture
+        </div>
+        <div class="shortcut-item">
+          <span class="key">R</span> Reload Player
+        </div>
+        <div class="shortcut-item"><span class="key">C</span> Toggle Chat</div>
+        <div class="shortcut-item">
+          <span class="key">Esc</span> Exit Fullscreen
+        </div>
+      </div>
     </div>
 
-    <p class="disclaimer">No streams are hosted on our servers. Chat provided by chat.kick.cx (third-party service).</p>
+    <p align="center" class="disclaimer">
+      No streams are hosted on our servers. Chat provided by <a
+        href="https://chat.kick.cx"
+        target="_blank"
+        rel="noopener noreferrer">chat.kick.cx</a>. This project is not affiliated with Kick. All rights belong to their respective owners.
+    </p>
+
+    <footer>
+      <small style="color: gray">Created by Onyx-i7 & Maintained by Byte9</small>
+    </footer>
 
     <div class="toast" id="toast"></div>
-
-    <script>
-        // ==================== DOM Elements ====================
-        const playerContainer = document.getElementById('playerContainer');
-        const placeholder = document.getElementById('placeholder');
-        const reloadBtn = document.getElementById('reloadBtn');
-        const toggleChatBtn = document.getElementById('toggleChatBtn');
-        const channelInput = document.getElementById('channelInput');
-        const goBtn = document.getElementById('goBtn');
-        const channelList = document.getElementById('channelList');
-        const favoritesList = document.getElementById('favoritesList');
-        const historyList = document.getElementById('historyList');
-        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-        const muteBtn = document.getElementById('muteBtn');
-        const pipBtn = document.getElementById('pipBtn');
-        const chatBtn = document.getElementById('chatBtn');
-        const reloadOverlayBtn = document.getElementById('reloadOverlayBtn');
-        const fullscreenBtn = document.getElementById('fullscreenBtn');
-        const chatSection = document.getElementById('chatSection');
-        const chatCloseBtn = document.getElementById('chatCloseBtn');
-        const chatIframeContainer = document.getElementById('chatIframeContainer');
-        const chatPlaceholder = document.getElementById('chatPlaceholder');
-        const toast = document.getElementById('toast');
-
-        // ==================== State ====================
-        let currentChannel = null;
-        let isMuted = false;
-        let pipWindow = null;
-        let isChatVisible = false;
-
-        const STORAGE_KEYS = {
-            HISTORY: 'kickPlayer_history',
-            FAVORITES: 'kickPlayer_favorites',
-            CHAT_ENABLED: 'kickPlayer_chatEnabled'
-        };
-
-        const MAX_HISTORY = 10;
-
-        const defaultChannels = [
-            'xqc', 'adinross', 'trainwreckstv', 'stake',
-            'kick', 'drdisrespect', 'amouranth', 'roshtein'
-        ];
-
-        // ==================== Toast Notifications ====================
-
-        let toastTimeout = null;
-        function showToast(message, duration = 2000) {
-            toast.textContent = message;
-            toast.classList.add('show');
-            if (toastTimeout) clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, duration);
-        }
-
-        // ==================== Storage Functions ====================
-        
-        function loadFromStorage(key) {
-            try {
-                const data = localStorage.getItem(key);
-                return data ? JSON.parse(data) : [];
-            } catch (e) {
-                console.warn(`Failed to load ${key} from localStorage:`, e);
-                return [];
-            }
-        }
-
-        function saveToStorage(key, data) {
-            try {
-                localStorage.setItem(key, JSON.stringify(data));
-            } catch (e) {
-                console.warn(`Failed to save ${key} to localStorage:`, e);
-            }
-        }
-
-        function getHistory() {
-            return loadFromStorage(STORAGE_KEYS.HISTORY);
-        }
-
-        function getFavorites() {
-            return loadFromStorage(STORAGE_KEYS.FAVORITES);
-        }
-
-        function isChatEnabled() {
-            try {
-                return localStorage.getItem(STORAGE_KEYS.CHAT_ENABLED) === 'true';
-            } catch (e) {
-                return false;
-            }
-        }
-
-        function setChatEnabled(enabled) {
-            try {
-                localStorage.setItem(STORAGE_KEYS.CHAT_ENABLED, enabled.toString());
-            } catch (e) {
-                console.warn('Failed to save chat state:', e);
-            }
-        }
-
-        // ==================== History Functions ====================
-
-        function addToHistory(channel) {
-            if (!channel) return;
-            let history = getHistory();
-            history = history.filter(ch => ch !== channel);
-            history.unshift(channel);
-            if (history.length > MAX_HISTORY) {
-                history = history.slice(0, MAX_HISTORY);
-            }
-            saveToStorage(STORAGE_KEYS.HISTORY, history);
-            renderHistory();
-        }
-
-        function clearHistory() {
-            if (!confirm('Are you sure you want to clear your watch history?')) return;
-            saveToStorage(STORAGE_KEYS.HISTORY, []);
-            renderHistory();
-            showToast('🗑️ History cleared');
-        }
-
-        // ==================== Favorites Functions ====================
-
-        function toggleFavorite(channel) {
-            if (!channel) return;
-            let favorites = getFavorites();
-            if (favorites.includes(channel)) {
-                favorites = favorites.filter(f => f !== channel);
-                showToast(`💔 Removed ${channel} from favorites`);
-            } else {
-                favorites.push(channel);
-                showToast(`⭐ Added ${channel} to favorites`);
-            }
-            saveToStorage(STORAGE_KEYS.FAVORITES, favorites);
-            renderFavorites();
-            renderHistory();
-            renderChannelList(defaultChannels);
-        }
-
-        function isFavorite(channel) {
-            return getFavorites().includes(channel);
-        }
-
-        // ==================== Render Functions ====================
-
-        function createChannelButton(channelName, showFavoriteBtn = true) {
-            const wrapper = document.createElement('div');
-            wrapper.style.display = 'inline-flex';
-            wrapper.style.alignItems = 'center';
-            wrapper.style.backgroundColor = '#2f2f35';
-            wrapper.style.borderRadius = '20px';
-            wrapper.style.padding = '2px 4px 2px 0';
-
-            const btn = document.createElement('button');
-            btn.className = 'channel-btn';
-            btn.textContent = channelName;
-            btn.style.borderRadius = '20px 0 0 20px';
-            btn.style.margin = '0';
-            if (currentChannel === channelName) {
-                btn.classList.add('active');
-            }
-            btn.addEventListener('click', () => loadChannel(channelName));
-
-            wrapper.appendChild(btn);
-
-            if (showFavoriteBtn) {
-                const favBtn = document.createElement('button');
-                favBtn.className = 'favorite-btn';
-                if (isFavorite(channelName)) {
-                    favBtn.classList.add('active');
-                    favBtn.textContent = '★';
-                    favBtn.title = 'Remove from favorites';
-                } else {
-                    favBtn.textContent = '☆';
-                    favBtn.title = 'Add to favorites';
-                }
-                favBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleFavorite(channelName);
-                });
-                wrapper.appendChild(favBtn);
-            }
-
-            return wrapper;
-        }
-
-        function renderFavorites() {
-            const favorites = getFavorites();
-            favoritesList.innerHTML = '';
-
-            if (favorites.length === 0) {
-                favoritesList.innerHTML = '<p class="empty-state">No favorites yet. Click the star on any channel to add it here.</p>';
-                return;
-            }
-
-            favorites.forEach(channelName => {
-                favoritesList.appendChild(createChannelButton(channelName, true));
-            });
-        }
-
-        function renderHistory() {
-            const history = getHistory();
-            historyList.innerHTML = '';
-
-            if (history.length === 0) {
-                historyList.innerHTML = '<p class="empty-state">Your watch history will appear here.</p>';
-                return;
-            }
-
-            history.forEach(channelName => {
-                historyList.appendChild(createChannelButton(channelName, true));
-            });
-        }
-
-        function renderChannelList(channels) {
-            channelList.innerHTML = '';
-
-            if (channels.length === 0) {
-                channelList.innerHTML = '<p class="empty-state">No channels available.</p>';
-                return;
-            }
-
-            channels.forEach(channelName => {
-                channelList.appendChild(createChannelButton(channelName, true));
-            });
-        }
-
-        // ==================== Player Functions ====================
-
-        function buildEmbedUrl(channel, muted = false) {
-            let url = `https://player.kick.com/${channel}`;
-            if (muted) {
-                url += '?muted=true';
-            }
-            return url;
-        }
-
-        function loadChannel(channel) {
-            if (!channel || channel.trim() === '') return;
-
-            currentChannel = channel.trim().toLowerCase();
-            channelInput.value = currentChannel;
-
-            addToHistory(currentChannel);
-
-            if (placeholder) {
-                placeholder.style.display = 'none';
-            }
-
-            const existingIframe = playerContainer.querySelector('iframe');
-            if (existingIframe) {
-                existingIframe.remove();
-            }
-
-            const iframe = document.createElement('iframe');
-            iframe.src = buildEmbedUrl(currentChannel, isMuted);
-            iframe.allow = 'autoplay; fullscreen';
-            iframe.allowFullscreen = true;
-            iframe.title = `Kick Player - ${currentChannel}`;
-            playerContainer.appendChild(iframe);
-
-            // Update chat if visible
-            if (isChatVisible) {
-                loadChat();
-            }
-
-            renderFavorites();
-            renderHistory();
-            renderChannelList(defaultChannels);
-
-            showToast(`▶️ Now playing: ${currentChannel}`);
-        }
-
-        function reloadPlayer() {
-            if (currentChannel) {
-                loadChannel(currentChannel);
-                showToast('🔄 Player reloaded');
-            } else {
-                showToast('⚠️ No channel loaded');
-            }
-        }
-
-        // ==================== Chat Functions ====================
-
-        function toggleChat() {
-            isChatVisible = !isChatVisible;
-            chatSection.classList.toggle('visible', isChatVisible);
-            chatBtn.classList.toggle('active', isChatVisible);
-            setChatEnabled(isChatVisible);
-
-            if (isChatVisible) {
-                loadChat();
-                showToast('💬 Chat enabled');
-            } else {
-                unloadChat();
-                showToast('💬 Chat disabled');
-            }
-        }
-
-        function loadChat() {
-            if (!currentChannel) {
-                chatPlaceholder.style.display = 'flex';
-                return;
-            }
-
-            chatPlaceholder.style.display = 'none';
-
-            // Remove existing chat iframe
-            const existingChat = chatIframeContainer.querySelector('iframe');
-            if (existingChat) {
-                existingChat.remove();
-            }
-
-            // Create chat iframe
-            const chatIframe = document.createElement('iframe');
-            chatIframe.src = `https://chat.kick.cx/embed/${currentChannel}`;
-            chatIframe.allow = 'autoplay';
-            chatIframe.title = `Kick Chat - ${currentChannel}`;
-            chatIframeContainer.appendChild(chatIframe);
-        }
-
-        function unloadChat() {
-            const existingChat = chatIframeContainer.querySelector('iframe');
-            if (existingChat) {
-                existingChat.remove();
-            }
-            chatPlaceholder.style.display = 'flex';
-        }
-
-        // ==================== Mute Toggle ====================
-
-        function toggleMute() {
-            if (!currentChannel) {
-                showToast('⚠️ No channel loaded');
-                return;
-            }
-            isMuted = !isMuted;
-            muteBtn.textContent = isMuted ? '🔇' : '🔊';
-            muteBtn.classList.toggle('active', isMuted);
-            
-            const iframe = playerContainer.querySelector('iframe');
-            if (iframe) {
-                iframe.src = buildEmbedUrl(currentChannel, isMuted);
-            }
-            showToast(isMuted ? '🔇 Muted' : '🔊 Unmuted');
-        }
-
-        // ==================== Picture-in-Picture ====================
-
-        function openPiP() {
-            if (!currentChannel) {
-                showToast('⚠️ No channel loaded');
-                return;
-            }
-
-            if (pipWindow && !pipWindow.closed) {
-                pipWindow.focus();
-                showToast('🖼️ PiP window already open');
-                return;
-            }
-
-            const width = 480;
-            const height = 270;
-            const left = (screen.width - width) / 2;
-            const top = (screen.height - height) / 2;
-
-            const pipHtml = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Kick PiP - ${currentChannel}</title>
-                    <style>
-                        * { margin: 0; padding: 0; box-sizing: border-box; }
-                        body { background: #000; overflow: hidden; }
-                        iframe { width: 100vw; height: 100vh; border: none; }
-                    </style>
-                </head>
-                <body>
-                    <iframe 
-                        src="${buildEmbedUrl(currentChannel, isMuted)}" 
-                        allow="autoplay; fullscreen" 
-                        allowfullscreen>
-                    </iframe>
-                </body>
-                </html>
-            `;
-
-            pipWindow = window.open(
-                '',
-                'kickPipWindow',
-                `width=${width},height=${height},left=${left},top=${top},resizable=yes`
-            );
-
-            if (pipWindow) {
-                pipWindow.document.write(pipHtml);
-                pipWindow.document.close();
-                pipBtn.classList.add('active');
-                showToast('🖼️ PiP mode opened');
-
-                const checkClosed = setInterval(() => {
-                    if (pipWindow.closed) {
-                        clearInterval(checkClosed);
-                        pipWindow = null;
-                        pipBtn.classList.remove('active');
-                    }
-                }, 1000);
-            } else {
-                showToast('⚠️ Popup blocked. Please allow popups for this site.');
-            }
-        }
-
-        // ==================== Fullscreen ====================
-
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                playerContainer.requestFullscreen()
-                    .then(() => {
-                        fullscreenBtn.classList.add('active');
-                        showToast('⛶ Fullscreen enabled');
-                    })
-                    .catch(err => {
-                        showToast('⚠️ Fullscreen failed: ' + err.message);
-                    });
-            } else {
-                document.exitFullscreen()
-                    .then(() => {
-                        fullscreenBtn.classList.remove('active');
-                        showToast('⛶ Fullscreen disabled');
-                    });
-            }
-        }
-
-        document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement) {
-                fullscreenBtn.classList.remove('active');
-            }
-        });
-
-        // ==================== Keyboard Shortcuts ====================
-
-        function isTypingInInput() {
-            const active = document.activeElement;
-            if (!active) return false;
-            const tag = active.tagName.toLowerCase();
-            return tag === 'input' || tag === 'textarea' || active.isContentEditable;
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (isTypingInInput()) return;
-            if (e.ctrlKey || e.altKey || e.metaKey) return;
-
-            const key = e.key.toLowerCase();
-
-            switch (key) {
-                case 'f':
-                    e.preventDefault();
-                    toggleFullscreen();
-                    break;
-                case 'm':
-                    e.preventDefault();
-                    toggleMute();
-                    break;
-                case 'p':
-                    e.preventDefault();
-                    openPiP();
-                    break;
-                case 'r':
-                    e.preventDefault();
-                    reloadPlayer();
-                    break;
-                case 'c':
-                    e.preventDefault();
-                    toggleChat();
-                    break;
-                case 'escape':
-                    break;
-            }
-        });
-
-        // ==================== Event Listeners ====================
-
-        goBtn.addEventListener('click', () => {
-            loadChannel(channelInput.value);
-        });
-
-        channelInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                loadChannel(channelInput.value);
-            }
-        });
-
-        reloadBtn.addEventListener('click', reloadPlayer);
-        toggleChatBtn.addEventListener('click', toggleChat);
-        clearHistoryBtn.addEventListener('click', clearHistory);
-
-        muteBtn.addEventListener('click', toggleMute);
-        pipBtn.addEventListener('click', openPiP);
-        chatBtn.addEventListener('click', toggleChat);
-        chatCloseBtn.addEventListener('click', toggleChat);
-        reloadOverlayBtn.addEventListener('click', reloadPlayer);
-        fullscreenBtn.addEventListener('click', toggleFullscreen);
-
-        // ==================== Initialization ====================
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderFavorites();
-            renderHistory();
-            renderChannelList(defaultChannels);
-
-            // Restore chat state
-            if (isChatEnabled()) {
-                isChatVisible = true;
-                chatSection.classList.add('visible');
-                chatBtn.classList.add('active');
-            }
-        });
-    </script>
-
-</body>
+  </body>
+  <script src="script.js"></script>
 </html>
