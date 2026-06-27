@@ -5,7 +5,7 @@
 **A clean, fast, and privacy-focused web player for Kick streams**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-53fc18.svg)](https://onyx-i7.github.io/Optimized-Kick-Player/)
-[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/Onyx-i7/Optimized-Kick-Player/releases)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/Onyx-i7/Optimized-Kick-Player/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![HTML5](https://img.shields.io/badge/HTML5-standards--compliant-orange.svg)](https://developer.mozilla.org/docs/Web/HTML)
 [![No Tracking](https://img.shields.io/badge/tracking-none-brightgreen.svg)]()
@@ -552,7 +552,7 @@ If you find this project useful, consider:
 
 <div align="center">
 
-**Built by [Onyx-i7](https://github.com/Onyx-i7)**
+**Built by [Onyx-i7](https://github.com/Onyx-i7) & Maintained by [Byte9](https://github.com/Byte9736)**
 
 [🚀 Try the Live Demo](https://onyx-i7.github.io/Optimized-Kick-Player/)
 
